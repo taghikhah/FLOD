@@ -8,7 +8,7 @@ from torchvision import transforms as T
 from torch.utils.data import Dataset, DataLoader
 from torchvision.datasets import CIFAR10, CIFAR100, SVHN
 from datasets.lsun import CroppedLSUN, ResizedLSUN
-from datasets.cifar import SubsetCIFAR10, SubsetCIFAR100
+from datasets.cifar import SubsetCIFAR100
 from datasets.textures import Textures
 from datasets.places import Places365
 from datasets.isun import ISUN
@@ -114,7 +114,6 @@ class CustomDataset(Dataset):
         elif ood_dataset == 'textures':
             ood_set = Textures(self.data_path, transform=self.get_transform(False, True), download=True)
         elif ood_dataset == '':
-            # ood_set = SubsetCIFAR(self.data_path, train=False, labels=[0,1,8,9], transform=self.get_transform(False, False), download=True)
             return 
         else:
             raise ValueError('OOD Dataset not supported: {}'.format(self.ood_dataset))

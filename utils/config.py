@@ -46,6 +46,8 @@ def get_args():
                         help='Prints the training progress.')
     parser.add_argument('--save-path', '-sp', type=str, default=ROOT / 'experiments', 
                         help='Path to save the experiment.')
+    parser.add_argument('--save-freq', '-sf', type=int, default=5,
+                        help='Frequency of saving the model.')
     parser.add_argument('--experiment-count', '-ec', type=int, default=3,
                         help='Number of test experiments to run.')
     parser.add_argument('--evalutaion-methods', '-em', type=str, nargs='+', default=['FLOD'],
