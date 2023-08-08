@@ -86,17 +86,7 @@ def get_args():
                         help='Resize the image to the image size of the dataset.')
     parser.add_argument('--no-prelims', '-np', action='store_true', default=False,
                         help='Disables the use of preliminary experiments.')
-    
-    # Visualization
-    parser.add_argument('--visualize-latent', '-vl', action='store_true', default=False,
-                        help='Enables visualization of latent space of Normalizing Flows.')
-    parser.add_argument('--visualize-histogram', '-vh', action='store_true', default=False,
-                        help='Enables visualization of histogram of Normalizing Flows.')
-    parser.add_argument('--histogram-min', '-hn', type=int, default=-350,
-                        help='Minimum value of X in histogram visualization.')
-    parser.add_argument('--histogram-max', '-hx', type=int, default=350,
-                        help='Maximum value of X in histogram visualization.')
-    
+        
     # Flows Model Settings
     parser.add_argument('--flows-weight', '-fw', type=str, default='',
                         help='Absolute path to load the flow model weights.')

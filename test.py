@@ -17,7 +17,7 @@ from models.flows import Flows, LogLikelihood
 from datasets.dataset import CustomDataset
 
 from utils.config import get_args
-from utils.general import  init_seeds, init_classifier, init_test, save_results, plot_multi_hist, plot_hist
+from utils.general import  init_seeds, init_classifier, init_test, save_results
 from utils.score import get_mahalanobis_score, get_odin_score, sample_estimator, get_measures, print_measures, get_gem_score
 
 
@@ -134,21 +134,16 @@ def run(**kwargs):
         experiments = []
         loaders = [(dset.ood_loader, state['ood_dataset'])] if state['ood_dataset'] != 'all' else dset.ood_loaders
         for method in ast.literal_eval(state['evalutaion_methods']):
-            id_score, id_inf = get_scores(dset.test_loader, method, in_dist=True)
-            ood_scores = []
             for ood_loader, ood in loaders:
                 aurocs, auprs, fprs, infs = [], [], [], []
                 for exp in range(state['experiment_count']):
+                    id_score, id_inf = get_scores(dset.test_loader, method, in_dist=True)
                     out_score, ood_inf = get_scores(ood_loader, method)
                     auroc, aupr, fpr, inf, log = calc_performance(id_score, id_inf, out_score, ood_inf, ood, state, method, exp)
                     aurocs.append(auroc); auprs.append(aupr); fprs.append(fpr); infs.append(inf); experiments.append(log)
-                    if state['visualize_histogram']:
-                        ood_scores.append({'name': ood, 'score': out_score})
                     
                 auroc_avg = np.mean(aurocs); aupr_avg = np.mean(auprs); fpr_avg = np.mean(fprs); inf_avg = np.mean(infs)
                 print_measures(auroc_avg, aupr_avg, fpr_avg, inf_avg, f"{method}: {ood.upper()}")
-            if state['visualize_histogram']:
-                plot_multi_hist(state, id_score, ood_scores)
 
         df_results = pd.DataFrame(experiments)
         save_results(state, df_results)

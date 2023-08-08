@@ -45,7 +45,6 @@ def run(**kwargs):
     for epoch in range(state['start'], state['epochs']):
         cls.eval()
         nfs.train()
-        train_ll = []
         train_loss = 0.0
         for idx, (data, _ ) in enumerate(dset.train_loader):
             data = data.cuda()
@@ -53,7 +52,7 @@ def run(**kwargs):
                 _, features = cls(data)
             optimizer.zero_grad()
             z, log_jac_det = nfs(features.detach())
-            ll, nll = criterion(z, log_jac_det)
+            _, nll = criterion(z, log_jac_det)
             train_loss += nll.item() 
             loss = nll / cls.dims_out
             loss.backward()
@@ -62,41 +61,33 @@ def run(**kwargs):
             writer.add_scalar("loss/train", nll.item(), epoch+idx)
             train_ll.append(ll)
         
-        train_ll = torch.cat(train_ll)
-        state = calc_stats(state, train_ll, 'train')
         state['train_loss'] = train_loss / len(dset.train_loader)
 
         nfs.eval()
-        eval_ll = []
         eval_loss = 0.0
         for idx, (data, _ ) in enumerate(dset.eval_loader):
             data = data.cuda()
             with torch.no_grad():
                 _, features = cls(data)
                 z, log_jac_det = nfs(features)
-            ll, nll = criterion(z, log_jac_det)
+            _, nll = criterion(z, log_jac_det)
             eval_loss += nll.item()
             writer.add_scalar("loss/eval", nll.item(), epoch+idx)
             eval_ll.append(ll)
         
-        eval_ll = torch.cat(eval_ll)
-        state = calc_stats(state, eval_ll, 'eval')
         state['eval_loss'] = eval_loss / len(dset.eval_loader)
 
-        test_ll = []
         test_loss = 0.0
         for idx, (data, _) in enumerate(dset.test_loader):
             data = data.cuda()
             with torch.no_grad():
                 _, features = cls(data)
                 z, log_jac_det = nfs(features)
-            ll, nll = criterion(z, log_jac_det)
+            _, nll = criterion(z, log_jac_det)
             test_loss += nll.item()
             writer.add_scalar("loss/test", nll.item(), epoch+idx)
             test_ll.append(ll)
             
-        test_ll = torch.cat(test_ll)
-        state = calc_stats(state, test_ll, 'test')
         state['test_loss'] = test_loss / len(dset.test_loader)
 
         log_flows(state, epoch)
@@ -105,7 +96,6 @@ def run(**kwargs):
     writer.flush()
     writer.close()
     
-
 
 def main(opt):
     run(**vars(opt))

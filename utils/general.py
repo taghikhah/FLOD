@@ -3,85 +3,10 @@ import torch
 import gdown
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from pathlib import Path
 from time import time
 from sklearn.metrics import roc_auc_score, average_precision_score, roc_curve
-
-
-############################## Plot ##################################
-
-def plot_multi_hist(state, id_scores, ood_scores_list):
-    img_dir = os.path.join(state['save_path'], f'histogram.png')
-    x_min = int(state['histogram_min']) 
-    x_max = int(state['histogram_max']) 
-    # bins = 50
-    num_data_points = id_scores.size
-    bins = int(np.sqrt(num_data_points) * 3)
-    # Calculate statistics
-    threshold = np.quantile(id_scores, 0.05)    
-    colors = plt.cm.viridis(np.linspace(0, 1, len(ood_scores_list)))
-    plt.figure(figsize=(12, 8))
-    
-    # In-distribution data
-    plt.hist(id_scores.ravel(), bins=bins, density=True, alpha=0.5, color='blue', edgecolor='grey', linewidth=1, label=f'In-distribution ({state["id_dataset"]})')
-    # Out-of-distribution datasets
-    for i, ood_scores_dict in enumerate(ood_scores_list):
-        ood_scores = ood_scores_dict['scores']
-        plt.hist(ood_scores.ravel(), bins=bins, density=True, alpha=0.5, color=colors[i], edgecolor='grey', linewidth=1, label=f'Out-of-distribution ({ood_scores_dict["name"]})')
-
-    # Threshold
-    plt.axvline(threshold, color='green', linestyle='dashed', linewidth=1, label=f'Threshold ({threshold:.0f})')
-    # Set the limits of the X-axis
-    plt.xlim([x_min, x_max])   
-    # Labels and legend
-    plt.xlabel('Log-likelihood')
-    plt.ylabel('Frequency') # if stat is set to 'frequency', then this is 'Frequency'
-    plt.title(f'Histogram of Log-likelihoods')
-    plt.legend(loc='upper left')
-    plt.savefig(img_dir)
-    plt.close()
-
-def plot_hist(state, id_scores, ood_scores, name):
-    img_dir = os.path.join(state['save_path'], f'{name}.png') 
-    x_min = int(state['histogram_min']) 
-    x_max = int(state['histogram_max']) 
-    threshold = state['threshold']
-    # Move tensors to CPU
-    id_scores = id_scores.cpu().numpy()
-    ood_scores = ood_scores.cpu().numpy()
-    # Calculate number of bins
-    num_data_points = id_scores.size
-    bins = int(np.sqrt(num_data_points))
-    # Plot Settings
-    plt.figure(figsize=(8, 5))
-    # ID Histograms
-    plt.hist(id_scores.ravel(), bins=bins, density=True, alpha=0.5, color='blue', 
-             edgecolor='grey', linewidth=0.3, label=f'In-distribution ({state["id_dataset"]})')
-    # OOD Histograms
-    _, bins, patches = plt.hist(ood_scores.ravel(), bins=bins, density=True, alpha=0.5, color='orange', 
-                                edgecolor='grey', linewidth=0.3, label=f'Out-of-distribution ({state["ood_dataset"]})')
-    # Change the edge color of bars for OOD scores that are above the threshold
-    false_positives = False  
-    for i in range(1, len(bins)): # ignore the rightmost edge
-        if bins[i-1] > threshold: 
-            patches[i-1].set_edgecolor('red')
-            patches[i-1].set_linewidth(1.5)
-            if not false_positives:  # If no false positives labeled yet, add a label
-                patches[i-1].set_label(f'False positives ({state["ood_dataset"]})')
-                false_positives = True  
-    # Threshold Line
-    plt.axvline(threshold, color='green', linestyle='dashed', linewidth=1, label=f'Threshold ({threshold:.0f})')
-    # Set the limits of the X-axis
-    plt.xlim([x_min, x_max])   
-    # Labels and legend
-    plt.xlabel('Log-likelihood')
-    plt.ylabel('Density') 
-    plt.title(f'Histogram of Log-likelihood Scores')
-    plt.legend(loc='upper left')
-    plt.savefig(img_dir)
-    plt.close()
 
 
 ############################## Runtime ##################################
@@ -127,12 +52,14 @@ def download_weights(path):
     weight_path = f'{path}/weights'
     if not os.path.exists(weight_path):
         os.makedirs(weight_path)
-
     weights = [
-        {'file_id': '1ZVkKpV3ftfoHDu-zzWzPU1ggI8E69JYh', 'file_name': 'wideresnet40-cifar10.pt'},
-        {'file_id': '1ZVkKpV3ftfoHDu-zzWzPU1ggI8E69JYh', 'file_name': 'wideresnet40-cifar100.pt'},
-        {'file_id': '1ZVkKpV3ftfoHDu-zzWzPU1ggI8E69JYh', 'file_name': 'glow-cifar10.pt'},
-        {'file_id': '1ZVkKpV3ftfoHDu-zzWzPU1ggI8E69JYh', 'file_name': 'glow-cifar100.pt'}
+        {'file_id': '1o800onuSobylqzsdKEOftYG_qWWXLLfC', 'file_name': 'cifar10_flows.pt'},
+        {'file_id': '1nxTKxWUwj1cHGx55ubRZDIedZ1dxL-cO', 'file_name': 'cifar10_wideresnet40.pt'},
+        {'file_id': '1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G', 'file_name': 'cifar10_resnet18.pt'},
+        {'file_id': '1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe', 'file_name': 'cifar10_mobilenetv2.pt'},
+        {'file_id': '1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q', 'file_name': 'cifar10_densenet121.pt'},
+        {'file_id': '1o9Pd98404gwFME2IWklSguB7-_f60oIF', 'file_name': 'cifar100_flows.pt'},
+        {'file_id': '1nzHhVw-hzmliSw4Zevyy3AncYYGU_j6C', 'file_name': 'cifar100_wideresnet40.pt'},
         ]
     for weight in weights:
         if not os.path.exists(f'{weight_path}/{weight["file_name"]}'):
@@ -262,10 +189,7 @@ def init_flows(state, nfs, device, optimizer=None):
             os.makedirs(save_path)
         if not os.path.exists(os.path.join(save_path, 'log.csv')):
             with open(os.path.join(save_path, 'log.csv'), 'w') as f:
-                header = ('epoch, train_loss, eval_loss, test_loss,'
-                          'trian_scores_min,train_scores_mean,train_scores_sigma,train_scores_max,'
-                          'eval_scores_min,eval_scores_mean,eval_scores_sigma,eval_scores_max,'
-                          'test_scores_min,test_scores_mean,test_scores_sigma,test_scores_max\n')
+                header = ('epoch, train_loss, eval_loss, test_loss\n')
                 f.write(header)
 
         if os.path.exists(os.path.join(save_path, 'exp.json')):
@@ -294,10 +218,7 @@ def init_flows(state, nfs, device, optimizer=None):
 
 def log_flows(state, epoch):
     with open(os.path.join(state['save_path'], 'log.csv'), 'a') as f:
-        result = (f"{epoch:3d},{state['aupr']:.4f},{state['train_loss']:4.0f},{state['eval_loss']:4.0f},{state['test_loss']:4.0f},"
-                  f"{state['train_scores_min']:4.0f},{state['train_scores_mean']:4.0f},{state['train_scores_sigma']:4.0f},{state['train_scores_max']:4.0f},"
-                    f"{state['eval_scores_min']:4.0f},{state['eval_scores_mean']:4.0f},{state['eval_scores_sigma']:4.0f},{state['eval_scores_max']:4.0f},"
-                    f"{state['test_scores_min']:4.0f},{state['test_scores_mean']:4.0f},{state['test_scores_sigma']:4.0f},{state['test_scores_max']:4.0f}\n")
+        result = (f"{epoch:3d},{state['train_loss']:4.0f},{state['eval_loss']:4.0f},{state['test_loss']:4.0f}\n")
         f.write(result)
 
     log = (f"Epoch {epoch:3d} | Train {state['train_loss']:4.0f} | Eval {state['eval_loss']:4.0f} | Test {state['test_loss']:4.0f}")    
