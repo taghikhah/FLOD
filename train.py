@@ -17,11 +17,12 @@ from models.flows import Flows, LogLikelihood
 from datasets.dataset import CustomDataset
 
 from utils.config import get_args
-from utils.general import  init_seeds, calc_stats, init_classifier, init_flows, save_flows, log_flows
+from utils.general import  init_seeds, init_classifier, init_train, save_train, download_weights
 
 
 def run(**kwargs):
     state = init_seeds({key: value for key, value  in kwargs.items()})
+    state = download_weights(state)
     dset = CustomDataset(state)
 
     cls = None 
@@ -38,7 +39,7 @@ def run(**kwargs):
     nfs = Flows(state, cls.dims_out)
     criterion = LogLikelihood(state) 
     optimizer = Adam(nfs.parameters(), lr=state['learning_rate'], betas=tuple(state['betas']), eps=state['eps'], weight_decay=state['weight_decay'])
-    state, nfs, optimizer = init_flows(state, nfs, device, optimizer)
+    state, nfs, optimizer = init_train(state, nfs, device, optimizer)
     
     writer = SummaryWriter(log_dir=state['save_path'])
 
@@ -46,7 +47,7 @@ def run(**kwargs):
         cls.eval()
         nfs.train()
         train_loss = 0.0
-        for idx, (data, _ ) in enumerate(dset.train_loader):
+        for data, _ in dset.train_loader:
             data = data.cuda()
             with torch.no_grad():
                 _, features = cls(data)
@@ -54,44 +55,39 @@ def run(**kwargs):
             z, log_jac_det = nfs(features.detach())
             _, nll = criterion(z, log_jac_det)
             train_loss += nll.item() 
-            loss = nll / cls.dims_out
-            loss.backward()
+            nll.backward()
             nn.utils.clip_grad_norm_(nfs.parameters(), state['max_norm']) 
             optimizer.step()
-            writer.add_scalar("loss/train", nll.item(), epoch+idx)
-            train_ll.append(ll)
         
         state['train_loss'] = train_loss / len(dset.train_loader)
+        writer.add_scalar("loss/train", state['train_loss'], epoch)
 
         nfs.eval()
         eval_loss = 0.0
-        for idx, (data, _ ) in enumerate(dset.eval_loader):
+        for data, _ in dset.eval_loader:
             data = data.cuda()
             with torch.no_grad():
                 _, features = cls(data)
                 z, log_jac_det = nfs(features)
             _, nll = criterion(z, log_jac_det)
             eval_loss += nll.item()
-            writer.add_scalar("loss/eval", nll.item(), epoch+idx)
-            eval_ll.append(ll)
         
         state['eval_loss'] = eval_loss / len(dset.eval_loader)
+        writer.add_scalar("loss/eval", state['eval_loss'], epoch)
 
         test_loss = 0.0
-        for idx, (data, _) in enumerate(dset.test_loader):
+        for data, _ in dset.test_loader:
             data = data.cuda()
             with torch.no_grad():
                 _, features = cls(data)
                 z, log_jac_det = nfs(features)
             _, nll = criterion(z, log_jac_det)
             test_loss += nll.item()
-            writer.add_scalar("loss/test", nll.item(), epoch+idx)
-            test_ll.append(ll)
             
         state['test_loss'] = test_loss / len(dset.test_loader)
+        writer.add_scalar("loss/test", state['test_loss'], epoch)
 
-        log_flows(state, epoch)
-        save_flows(state, epoch, nfs, optimizer)
+        save_train(state, epoch, nfs, optimizer)
 
     writer.flush()
     writer.close()

@@ -17,7 +17,7 @@ from models.flows import Flows, LogLikelihood
 from datasets.dataset import CustomDataset
 
 from utils.config import get_args
-from utils.general import  init_seeds, init_classifier, init_test, save_results
+from utils.general import  init_seeds, init_classifier, init_test, save_test
 from utils.score import get_mahalanobis_score, get_odin_score, sample_estimator, get_measures, print_measures, get_gem_score
 
 
@@ -146,7 +146,7 @@ def run(**kwargs):
                 print_measures(auroc_avg, aupr_avg, fpr_avg, inf_avg, f"{method}: {ood.upper()}")
 
         df_results = pd.DataFrame(experiments)
-        save_results(state, df_results)
+        save_test(state, df_results)
     
     # Run experiments
     run_experiments()
