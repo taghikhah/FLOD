@@ -17,12 +17,12 @@ from models.flows import Flows, LogLikelihood
 from datasets.dataset import CustomDataset
 
 from utils.config import get_args
-from utils.general import  init_seeds, init_classifier, init_test, save_test
+from utils.general import  init_experiment, init_classifier, init_test, save_test
 from utils.score import get_mahalanobis_score, get_odin_score, sample_estimator, get_measures, print_measures, get_gem_score
 
 
 def run(**kwargs):
-    state = init_seeds({key: value for key, value  in kwargs.items()})
+    state = init_experiment({key: value for key, value  in kwargs.items()}, 'test')
     dset = CustomDataset(state)
 
     cls = None 

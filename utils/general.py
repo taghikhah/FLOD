@@ -11,7 +11,7 @@ from sklearn.metrics import roc_auc_score, average_precision_score, roc_curve
 
 ############################## Runtime ##################################
 
-def init_seeds(state):
+def init_experiment(state, exp_type):
     seed = int(time()) if state['seed'] == -1 else state['seed']
     random.seed(seed)
     np.random.seed(seed)
@@ -21,6 +21,8 @@ def init_seeds(state):
     torch.backends.cudnn.benchmark = False  
     torch.backends.cudnn.deterministic = True 
     state['seed'] = seed
+    models = [state['classifier_model']] if exp_type == 'train' else [state['classifier_model'], state['flows_model']]
+    download_weights(state, models)
     return state
 
 def increment_path(path, sep='-'):
@@ -53,23 +55,28 @@ def convert_to_string(dct):
             dct[key] = str(value)
     return dct
 
-def download_weights(state):
+def download_weights(state, models):
     weight_path = state['weight_path']
     weights = [
-        {'file_id': '1o800onuSobylqzsdKEOftYG_qWWXLLfC', 'file_name': 'cifar10_flows.pt', 'model_name': 'glow'},
-        {'file_id': '1nxTKxWUwj1cHGx55ubRZDIedZ1dxL-cO', 'file_name': 'cifar10_wideresnet40.pt', 'model_name': 'wideresnet40'},
-        {'file_id': '1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G', 'file_name': 'cifar10_resnet18.pt', 'model_name': 'resnet18'},
-        {'file_id': '1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe', 'file_name': 'cifar10_mobilenetv2.pt', 'model_name': 'mobilenetv2'},
-        {'file_id': '1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q', 'file_name': 'cifar10_densenet121.pt', 'model_name': 'densenet121'},
-        {'file_id': '1o9Pd98404gwFME2IWklSguB7-_f60oIF', 'file_name': 'cifar100_flows.pt', 'model_name': 'glow'},
-        {'file_id': '1nzHhVw-hzmliSw4Zevyy3AncYYGU_j6C', 'file_name': 'cifar100_wideresnet40.pt', 'model_name': 'wideresnet40'},
+        {'file_id': '1q2575x0tzSQ2EXXoS6S72KbH2um61clp', 'file_name': 'cifar10_flows_best.pt', 'model_name': 'glow_best', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q2575x0tzSQ2EXXoS6S72KbH2um61clp
+        {'file_id': '1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx', 'file_name': 'cifar10_wideresnet40_best.pt', 'model_name': 'wideresnet40_best', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx
+        {'file_id': '1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5', 'file_name': 'cifar10_flows_last.pt', 'model_name': 'glow_last', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5
+        {'file_id': '1php8LmWLq5ZGXKQbA9tP5NrLzBDDTCKe', 'file_name': 'cifar10_wideresnet40_last.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1php8LmWLq5ZGXKQbA9tP5NrLzBDDTCKe
+        {'file_id': '1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G', 'file_name': 'cifar10_resnet18.pt', 'model_name': 'resnet18', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G
+        {'file_id': '1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe', 'file_name': 'cifar10_mobilenetv2.pt', 'model_name': 'mobilenetv2', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe 
+        {'file_id': '1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q', 'file_name': 'cifar10_densenet121.pt', 'model_name': 'densenet121', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q
+        {'file_id': '1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O', 'file_name': 'cifar100_flows_best.pt', 'model_name': 'glow_best', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O
+        {'file_id': '1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn', 'file_name': 'cifar100_wideresnet40_best.pt', 'model_name': 'wideresnet40_best', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn
+        {'file_id': '1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t', 'file_name': 'cifar100_flows_last.pt', 'model_name': 'glow_last', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t
+        {'file_id': '1piLH0zkxhrZMs94oodIi0s7MkVTLVwA9', 'file_name': 'cifar100_wideresnet40_last.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1piLH0zkxhrZMs94oodIi0s7MkVTLVwA9
         ]
     
     status = False
+    weights = [weight for weight in weights if weight['model_name'] in models and weight['id_dataset'] == state['id_dataset']]
     for weight in weights:
         if os.path.isfile(os.path.join(weight_path, weight['file_name'])):
             status = True
-            print("Do you want to download pre-trained weights (~1GB) of the models? (y/n)")
+            print("Do you want to download pre-trained weights? (y/n)")
             break
     
     answer = None
@@ -89,7 +96,6 @@ def download_weights(state):
                 gdown.download(f"https://drive.google.com/uc?id={weight['file_id']}", output=os.path.join(weight_path, weight['file_name']), quiet=False)
                 print(f"Downloading {weight['file_name']}... Done!")
         
-    return state
 
 
 ############################## Testing ##################################

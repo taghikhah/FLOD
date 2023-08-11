@@ -17,12 +17,11 @@ from models.flows import Flows, LogLikelihood
 from datasets.dataset import CustomDataset
 
 from utils.config import get_args
-from utils.general import  init_seeds, init_classifier, init_train, save_train, download_weights
+from utils.general import  init_experiment, init_classifier, init_train, save_train
 
 
 def run(**kwargs):
-    state = init_seeds({key: value for key, value  in kwargs.items()})
-    state = download_weights(state)
+    state = init_experiment({key: value for key, value  in kwargs.items()}, 'train')
     dset = CustomDataset(state)
 
     cls = None 
