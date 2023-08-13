@@ -58,23 +58,24 @@ def convert_to_string(dct):
 def download_weights(state, models):
     weight_path = state['weight_path']
     weights = [
-        {'file_id': '1q2575x0tzSQ2EXXoS6S72KbH2um61clp', 'file_name': 'cifar10_flows_best.pt', 'model_name': 'glow_best', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q2575x0tzSQ2EXXoS6S72KbH2um61clp
-        {'file_id': '1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx', 'file_name': 'cifar10_wideresnet40_best.pt', 'model_name': 'wideresnet40_best', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx
-        {'file_id': '1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5', 'file_name': 'cifar10_flows_last.pt', 'model_name': 'glow_last', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5
+        # {'file_id': '1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx', 'file_name': 'cifar10_wideresnet40_best.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx
+        # {'file_id': '1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5', 'file_name': 'cifar10_flows_last.pt', 'model_name': 'glow', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5
+        {'file_id': '1q2575x0tzSQ2EXXoS6S72KbH2um61clp', 'file_name': 'cifar10_flows_best.pt', 'model_name': 'glow', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q2575x0tzSQ2EXXoS6S72KbH2um61clp
         {'file_id': '1php8LmWLq5ZGXKQbA9tP5NrLzBDDTCKe', 'file_name': 'cifar10_wideresnet40_last.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1php8LmWLq5ZGXKQbA9tP5NrLzBDDTCKe
         {'file_id': '1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G', 'file_name': 'cifar10_resnet18.pt', 'model_name': 'resnet18', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G
         {'file_id': '1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe', 'file_name': 'cifar10_mobilenetv2.pt', 'model_name': 'mobilenetv2', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe 
         {'file_id': '1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q', 'file_name': 'cifar10_densenet121.pt', 'model_name': 'densenet121', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q
-        {'file_id': '1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O', 'file_name': 'cifar100_flows_best.pt', 'model_name': 'glow_best', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O
-        {'file_id': '1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn', 'file_name': 'cifar100_wideresnet40_best.pt', 'model_name': 'wideresnet40_best', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn
-        {'file_id': '1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t', 'file_name': 'cifar100_flows_last.pt', 'model_name': 'glow_last', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t
+        
+        # {'file_id': '1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn', 'file_name': 'cifar100_wideresnet40_best.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn
+        # {'file_id': '1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t', 'file_name': 'cifar100_flows_last.pt', 'model_name': 'glow', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t
+        {'file_id': '1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O', 'file_name': 'cifar100_flows_best.pt', 'model_name': 'glow', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O
         {'file_id': '1piLH0zkxhrZMs94oodIi0s7MkVTLVwA9', 'file_name': 'cifar100_wideresnet40_last.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1piLH0zkxhrZMs94oodIi0s7MkVTLVwA9
         ]
     
     status = False
     weights = [weight for weight in weights if weight['model_name'] in models and weight['id_dataset'] == state['id_dataset']]
     for weight in weights:
-        if os.path.isfile(os.path.join(weight_path, weight['file_name'])):
+        if not os.path.isfile(os.path.join(weight_path, weight['file_name'])):
             status = True
             print("Do you want to download pre-trained weights? (y/n)")
             break
@@ -94,9 +95,8 @@ def download_weights(state, models):
             if not os.path.isfile(os.path.join(weight_path, weight['file_name'])):
                 print(f"Downloading {weight['file_name']}...")
                 gdown.download(f"https://drive.google.com/uc?id={weight['file_id']}", output=os.path.join(weight_path, weight['file_name']), quiet=False)
-                print(f"Downloading {weight['file_name']}... Done!")
+                print(f"Done!")
         
-
 
 ############################## Testing ##################################
 
@@ -186,9 +186,9 @@ def init_train(state, nfs, device, optimizer=None):
         
         print(f"Pre-trained [{state['flows_model'].upper()}] found: {state['flows_weight']}")
     
-    if state['use_cuda']:
-        nfs = nfs.cuda()
+
     if optimizer is not None:
+        nfs = nfs.to(device)
         if state['start'] == 0 and save_path == '':
             save_path = increment_path(Path(f'{state["save_path"]}/train/{state["id_dataset"]}-{state["flows_model"]}'))
             os.makedirs(save_path)
@@ -196,7 +196,6 @@ def init_train(state, nfs, device, optimizer=None):
             with open(os.path.join(save_path, 'log.csv'), 'w') as f:
                 header = ('epoch, train_loss, eval_loss, test_loss\n')
                 f.write(header)
-
         if os.path.exists(os.path.join(save_path, 'exp.json')):
             os.remove(os.path.join(save_path, 'exp.json')) 
 
@@ -209,17 +208,6 @@ def init_train(state, nfs, device, optimizer=None):
         print(f"Training [{state['flows_model'].upper()}] on [{state['id_dataset'].upper()}] from epoch [{int(state['start'])+1}] ... \n")
 
         return state, nfs, optimizer
-    else:
-        save_path = increment_path(Path(f'{state["save_path"]}/test/{state["id_dataset"]}-{state["ood_dataset"]}'))
-        print(f"Evaluating on [{state['id_dataset'].upper()}] as the in-distribution, and [{state['ood_dataset'].upper()}] as the out-of-distribution dataset ... \n")
-        os.makedirs(save_path)
-        state = convert_to_string(state)
-        state['save_path'] = str(save_path)
-        state['exp_date'] = datetime.datetime.now().strftime('%d.%m.%Y - %H:%M:%S')
-        with open(os.path.join(save_path, 'exp.json'), 'w') as f:
-            json.dump(state, f, indent=4)
-
-        return state, nfs
 
 def log_train(state, epoch):
     with open(os.path.join(state['save_path'], 'log.csv'), 'a') as f:
@@ -242,13 +230,10 @@ def save_train(state, epoch, nfs, optimizer):
     log_train(state, epoch)
     # Save the model of the current epoch
     if epoch % state['save_freq'] == 0:
-        save_weight(epoch, state, nfs, optimizer, 'last.pt')
+        save_weight(epoch, state, nfs, optimizer, f'epoch-{epoch}.pt')
         # If it's the third save, delete the second previous one
         if epoch > state['save_freq']:
             os.remove(os.path.join(state['save_path'], f'epoch-{epoch-2*state["save_freq"]}.pt'))
-        # If it's the last epoch, save with the specific epoch name
-        if epoch == state['epochs']:
-            save_weight(epoch, state, nfs, optimizer, f'epoch-{epoch}.pt')
 
         
 

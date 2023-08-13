@@ -96,9 +96,9 @@ def run(**kwargs):
                             cls.eval()
                             nfs.eval()
                             _, features = cls(data)
-                            z, log_jac_det = nfs(features)
-                            log_likelihood, _ = criterion(z, log_jac_det)
-                            scores.append(to_np(log_likelihood))
+                            z, ljd = nfs(features)
+                            ll, _ = criterion(z, ljd)
+                            scores.append(to_np(ll))
                         else:
                             raise ValueError('Method not supported: {}'.format(method))
             inf_end = tm.time()

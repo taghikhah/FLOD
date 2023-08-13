@@ -51,8 +51,8 @@ def run(**kwargs):
             with torch.no_grad():
                 _, features = cls(data)
             optimizer.zero_grad()
-            z, log_jac_det = nfs(features.detach())
-            _, nll = criterion(z, log_jac_det)
+            z, ljd = nfs(features.detach())
+            _, nll = criterion(z, ljd)
             train_loss += nll.item() 
             nll.backward()
             nn.utils.clip_grad_norm_(nfs.parameters(), state['max_norm']) 
@@ -67,8 +67,8 @@ def run(**kwargs):
             data = data.cuda()
             with torch.no_grad():
                 _, features = cls(data)
-                z, log_jac_det = nfs(features)
-            _, nll = criterion(z, log_jac_det)
+                z, ljd = nfs(features)
+            _, nll = criterion(z, ljd)
             eval_loss += nll.item()
         
         state['eval_loss'] = eval_loss / len(dset.eval_loader)
@@ -79,8 +79,8 @@ def run(**kwargs):
             data = data.cuda()
             with torch.no_grad():
                 _, features = cls(data)
-                z, log_jac_det = nfs(features)
-            _, nll = criterion(z, log_jac_det)
+                z, ljd = nfs(features)
+            _, nll = criterion(z, ljd)
             test_loss += nll.item()
             
         state['test_loss'] = test_loss / len(dset.test_loader)
