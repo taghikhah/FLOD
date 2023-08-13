@@ -31,11 +31,11 @@ class Textures(Dataset):
     
     def download_data(self):
         if not os.path.exists(f'{self.data_path}/{self.subfolder_name}'):
-            print(f"Downloading {self.file_name.split('.')[0]} dataset from Google Drive...\n")
+            print(f"\n Downloading {self.file_name.split('.')[0]} dataset from Google Drive ...")
             gdown.download(self.dataset_url, output=os.path.join(self.data_path, self.file_name), quiet=False)
             tar = tarfile.open(os.path.join(self.data_path, self.file_name))
             tar.extractall(self.data_path)
             tar.close()
-            print('Download completed!')
+            print('Download completed! \n')
         else:
             print(f"{self.file_name.split('.')[0]} (DTD) dataset already downloaded and verified: {os.path.join(self.data_path, self.file_name)}")
