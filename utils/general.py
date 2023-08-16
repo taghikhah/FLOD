@@ -58,17 +58,17 @@ def convert_to_string(dct):
 def download_weights(state, models):
     weight_path = state['weight_path']
     weights = [
-        # {'file_id': '1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5', 'file_name': 'cifar10_glow_last.pt', 'model_name': 'glow', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5
+        {'file_id': '1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5', 'file_name': 'cifar10_glow_last.pt', 'model_name': 'glow', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1pj4fAg5o6jgyY4HujHcyUux8hoM4Qqv5
         # {'file_id': '1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx', 'file_name': 'cifar10_wideresnet40_best.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q7cCVK3AuaHshe0GwcCVEg47IqYC2XMx
-        {'file_id': '1q2575x0tzSQ2EXXoS6S72KbH2um61clp', 'file_name': 'cifar10_glow_best.pt', 'model_name': 'glow', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q2575x0tzSQ2EXXoS6S72KbH2um61clp
+        # {'file_id': '1q2575x0tzSQ2EXXoS6S72KbH2um61clp', 'file_name': 'cifar10_glow_best.pt', 'model_name': 'glow', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1q2575x0tzSQ2EXXoS6S72KbH2um61clp
         {'file_id': '1php8LmWLq5ZGXKQbA9tP5NrLzBDDTCKe', 'file_name': 'cifar10_wideresnet40_last.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1php8LmWLq5ZGXKQbA9tP5NrLzBDDTCKe
         {'file_id': '1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G', 'file_name': 'cifar10_resnet18.pt', 'model_name': 'resnet18', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oLXZPLvO4xx7b_X7VAkV0mVR8s04gX1G
         {'file_id': '1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe', 'file_name': 'cifar10_mobilenetv2.pt', 'model_name': 'mobilenetv2', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oECfEFNqfFZWuzWsh0SI8f5csuzVFRAe 
         {'file_id': '1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q', 'file_name': 'cifar10_densenet121.pt', 'model_name': 'densenet121', 'id_dataset': 'cifar10'}, # https://drive.google.com/file/d/1oG0mz6bFV9GiBScIRcUHBTGj4pmwdq2q
         
-        # {'file_id': '1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t', 'file_name': 'cifar100_glow_last.pt', 'model_name': 'glow', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t
+        {'file_id': '1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t', 'file_name': 'cifar100_glow_last.pt', 'model_name': 'glow', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1ptc3esVVpphmPQgaGx-0ke6Ohcrqxa9t
         # {'file_id': '1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn', 'file_name': 'cifar100_wideresnet40_best.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1q-7BwzDhU21nxM_2nIFMyP4dFRznw5hn
-        {'file_id': '1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O', 'file_name': 'cifar100_glow_best.pt', 'model_name': 'glow', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O
+        # {'file_id': '1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O', 'file_name': 'cifar100_glow_best.pt', 'model_name': 'glow', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1pyKYm2lINNZGy7yiKG9Ttz_emI0PEI-O
         {'file_id': '1piLH0zkxhrZMs94oodIi0s7MkVTLVwA9', 'file_name': 'cifar100_wideresnet40_last.pt', 'model_name': 'wideresnet40', 'id_dataset': 'cifar100'}, # https://drive.google.com/file/d/1piLH0zkxhrZMs94oodIi0s7MkVTLVwA9
         ]
     

@@ -133,3 +133,6 @@ data/*
 
 # weights
 experiments/*
+
+# logs
+_*
